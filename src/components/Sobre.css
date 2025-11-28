@@ -1,0 +1,40 @@
+.sobre-section {
+  padding-top: 120px;
+  background: var(--bg-light);
+}
+
+.sobre-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.local-name {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.descricao {
+  font-size: 1.1rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+@media (max-width: 768px) {
+  .sobre-section {
+    padding-top: 100px;
+  }
+
+  .local-name {
+    font-size: 1.75rem;
+  }
+
+  .descricao {
+    font-size: 1rem;
+    text-align: left;
+  }
+}
+

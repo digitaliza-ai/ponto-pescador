@@ -1,0 +1,93 @@
+.contato-section {
+  background: var(--white);
+}
+
+.contato-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.contato-card {
+  background: var(--white);
+  border-radius: 15px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.contato-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--accent-color);
+}
+
+.card-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  transition: transform 0.3s ease;
+}
+
+.contato-card:hover .card-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.card-content {
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
+
+.contact-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.contact-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .contato-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contato-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .card-icon {
+    width: 70px;
+    height: 70px;
+  }
+
+  .card-title {
+    font-size: 1.3rem;
+  }
+
+  .card-content {
+    font-size: 1rem;
+  }
+}
+
