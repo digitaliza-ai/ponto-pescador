@@ -26,7 +26,7 @@ const Header = () => {
       <div className="header-container">
         <div className="logo-container">
           <img 
-            src="https://yt3.googleusercontent.com/ZcHDib0W_I1JvYcsB5rtk8LK_0ELcw8m8q8mUZIvcuW1GiHQqA7OyydgPMf-OByjC7F60tXQeA=s160-c-k-c0x00ffffff-no-rj" 
+            src="https://raw.githubusercontent.com/digitaliza-ai/ponto-pescador/refs/heads/main/pontopescador.jpg" 
             alt="Ponto do Pescador Logo" 
             className="logo"
           />
