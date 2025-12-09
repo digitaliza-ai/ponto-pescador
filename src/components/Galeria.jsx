@@ -32,7 +32,7 @@ const Galeria = () => {
   }
 
   const getDirectImageUrl = (fileId) => {
-    return `https://drive.google.com/uc?export=view&id=${fileId}`
+    return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`
   }
 
   useEffect(() => {
@@ -44,14 +44,14 @@ const Galeria = () => {
         if (result.error) {
           console.error('Erro ao carregar imagens do Google Drive:', result.error)
           setImages([
-            'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
+            'https://placehold.co/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
           ])
         } else if (result.files && result.files.length > 0) {
           const imageUrls = result.files.map(file => getDirectImageUrl(file.id))
           setImages(imageUrls)
         } else {
           setImages([
-            'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Nenhuma+imagem+encontrada'
+            'https://placehold.co/800x600/2d2d2d/d4af37?text=Nenhuma+imagem+encontrada'
           ])
         }
         
@@ -59,7 +59,7 @@ const Galeria = () => {
       } catch (error) {
         console.error('Erro ao carregar imagens:', error)
         setImages([
-          'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
+          'https://placehold.co/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
         ])
         setLoading(false)
       }
@@ -120,24 +120,13 @@ const Galeria = () => {
           </button>
           
           <div className="carousel-slide-container">
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
-                style={{ display: index === currentIndex ? 'block' : 'none' }}
-              >
-                <img 
-                  src={image} 
-                  alt={`Ponto do Pescador ${index + 1}`}
-                  className="carousel-image"
-                  loading="lazy"
-                  onError={(e) => {
-                    console.error('Erro ao carregar imagem:', image)
-                    e.target.src = 'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar+imagem'
-                  }}
-                />
-              </div>
-            ))}
+            <div className="carousel-slide active">
+              <img 
+                src={images[currentIndex]} 
+                alt={`Ponto do Pescador ${currentIndex + 1}`}
+                className="carousel-image"
+              />
+            </div>
           </div>
 
           <button 
