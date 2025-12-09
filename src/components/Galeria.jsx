@@ -7,55 +7,77 @@ const Galeria = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  const fetchDriveImages = async (folderId) => {
+    try {
+      const API_KEY = import.meta.env.VITE_API_KEY
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png'+or+mimeType='image/webp'+or+mimeType='image/jpg'+or+mimeType='image/gif')&key=${API_KEY}&fields=files(id,name,mimeType)`
+      const response = await fetch(url)
+
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`)
+      }
+
+      const data = await response.json()
+
+      if (data.error) {
+        console.error('Erro na API do Google Drive:', data.error)
+        return { error: data.error }
+      }
+
+      return { files: data.files || [] }
+    } catch (error) {
+      console.error('Erro ao buscar imagens:', error)
+      return { error: error.message }
+    }
+  }
+
+  const getDirectImageUrl = (fileId) => {
+    return `https://drive.google.com/uc?export=view&id=${fileId}`
+  }
+
   useEffect(() => {
-    const loadImages = async () => {
+    const fetchImages = async () => {
       try {
-        // IDs de exemplo - substitua pelos IDs reais dos arquivos do Google Drive
-        const imageIds = [
-          // Adicione aqui os IDs dos arquivos do Google Drive
-          // Formato: https://drive.google.com/uc?export=view&id=FILE_ID
-        ]
+        const folderId = import.meta.env.VITE_GALERIA_FOLDER_ID
+        const result = await fetchDriveImages(folderId)
         
-        // Se não houver IDs configurados, use imagens placeholder
-        if (imageIds.length === 0) {
+        if (result.error) {
+          console.error('Erro ao carregar imagens do Google Drive:', result.error)
           setImages([
-            'https://via.placeholder.com/800x600?text=Imagem+1',
-            'https://via.placeholder.com/800x600?text=Imagem+2',
-            'https://via.placeholder.com/800x600?text=Imagem+3',
-            'https://via.placeholder.com/800x600?text=Imagem+4',
+            'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
           ])
+        } else if (result.files && result.files.length > 0) {
+          const imageUrls = result.files.map(file => getDirectImageUrl(file.id))
+          setImages(imageUrls)
         } else {
-          const driveImages = imageIds.map(id => 
-            `https://drive.google.com/uc?export=view&id=${id}`
-          )
-          setImages(driveImages)
+          setImages([
+            'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Nenhuma+imagem+encontrada'
+          ])
         }
+        
         setLoading(false)
       } catch (error) {
         console.error('Erro ao carregar imagens:', error)
+        setImages([
+          'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
+        ])
         setLoading(false)
       }
     }
 
-    loadImages()
+    fetchImages()
   }, [])
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => {
-      const isDesktop = window.innerWidth > 968
-      const step = isDesktop ? 2 : 1
-      const newIndex = prevIndex - step
-      return newIndex < 0 ? images.length - step : newIndex
-    })
+    setCurrentIndex((prevIndex) => 
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    )
   }
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => {
-      const isDesktop = window.innerWidth > 968
-      const step = isDesktop ? 2 : 1
-      const newIndex = prevIndex + step
-      return newIndex >= images.length ? 0 : newIndex
-    })
+    setCurrentIndex((prevIndex) => 
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    )
   }
 
   const goToSlide = (index) => {
@@ -66,12 +88,9 @@ const Galeria = () => {
   useEffect(() => {
     if (images.length > 0) {
       const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => {
-          const isDesktop = window.innerWidth > 968
-          const step = isDesktop ? 2 : 1
-          const newIndex = prevIndex + step
-          return newIndex >= images.length ? 0 : newIndex
-        })
+        setCurrentIndex((prevIndex) => 
+          prevIndex === images.length - 1 ? 0 : prevIndex + 1
+        )
       }, 5000) // Muda a cada 5 segundos
 
       return () => clearInterval(interval)
@@ -101,30 +120,24 @@ const Galeria = () => {
           </button>
           
           <div className="carousel-slide-container">
-            {images.map((image, index) => {
-              // Em desktop mostra 2 imagens (currentIndex e currentIndex + 1)
-              // Em mobile mostra apenas 1 (currentIndex)
-              const nextIndex = (currentIndex + 1) % images.length
-              const isVisible = index === currentIndex || index === nextIndex
-              
-              return (
-                <div
-                  key={index}
-                  className={`carousel-slide ${isVisible ? 'active' : ''} ${
-                    index === currentIndex ? 'primary' : ''
-                  }`}
-                  data-index={index}
-                  data-current={currentIndex}
-                >
-                  <img 
-                    src={image} 
-                    alt={`Ponto do Pescador ${index + 1}`}
-                    className="carousel-image"
-                    loading="lazy"
-                  />
-                </div>
-              )
-            })}
+            {images.map((image, index) => (
+              <div
+                key={index}
+                className={`carousel-slide ${index === currentIndex ? 'active' : ''}`}
+                style={{ display: index === currentIndex ? 'block' : 'none' }}
+              >
+                <img 
+                  src={image} 
+                  alt={`Ponto do Pescador ${index + 1}`}
+                  className="carousel-image"
+                  loading="lazy"
+                  onError={(e) => {
+                    console.error('Erro ao carregar imagem:', image)
+                    e.target.src = 'https://via.placeholder.com/800x600/2d2d2d/d4af37?text=Erro+ao+carregar+imagem'
+                  }}
+                />
+              </div>
+            ))}
           </div>
 
           <button 
