@@ -69,15 +69,20 @@ const Galeria = () => {
   }, [])
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    )
+    setCurrentIndex((prevIndex) => {
+      const isDesktop = window.innerWidth > 968
+      const step = isDesktop ? 2 : 1
+      return prevIndex === 0 ? Math.max(0, images.length - step) : Math.max(0, prevIndex - step)
+    })
   }
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    )
+    setCurrentIndex((prevIndex) => {
+      const isDesktop = window.innerWidth > 968
+      const step = isDesktop ? 2 : 1
+      const maxIndex = isDesktop ? images.length - 2 : images.length - 1
+      return prevIndex >= maxIndex ? 0 : prevIndex + step
+    })
   }
 
   const goToSlide = (index) => {
@@ -88,9 +93,12 @@ const Galeria = () => {
   useEffect(() => {
     if (images.length > 0) {
       const interval = setInterval(() => {
-        setCurrentIndex((prevIndex) => 
-          prevIndex === images.length - 1 ? 0 : prevIndex + 1
-        )
+        setCurrentIndex((prevIndex) => {
+          const isDesktop = window.innerWidth > 968
+          const step = isDesktop ? 2 : 1
+          const maxIndex = isDesktop ? images.length - 2 : images.length - 1
+          return prevIndex >= maxIndex ? 0 : prevIndex + step
+        })
       }, 5000) // Muda a cada 5 segundos
 
       return () => clearInterval(interval)
@@ -120,13 +128,27 @@ const Galeria = () => {
           </button>
           
           <div className="carousel-slide-container">
-            <div className="carousel-slide active">
-              <img 
-                src={images[currentIndex]} 
-                alt={`Ponto do Pescador ${currentIndex + 1}`}
-                className="carousel-image"
-              />
-            </div>
+            {images.map((image, index) => {
+              const isDesktop = window.innerWidth > 968
+              const isVisible = isDesktop 
+                ? (index === currentIndex || index === currentIndex + 1)
+                : (index === currentIndex)
+              
+              return (
+                <div
+                  key={index}
+                  className={`carousel-slide ${isVisible ? 'active' : ''} ${
+                    index === currentIndex ? 'primary' : ''
+                  }`}
+                >
+                  <img 
+                    src={image} 
+                    alt={`Ponto do Pescador ${index + 1}`}
+                    className="carousel-image"
+                  />
+                </div>
+              )
+            })}
           </div>
 
           <button 
