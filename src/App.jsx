@@ -5,6 +5,7 @@ import Sobre from './components/Sobre'
 import Galeria from './components/Galeria'
 import Contato from './components/Contato'
 import Endereco from './components/Endereco'
+import WhatsappButton from './components/WhatsappButton'
 import './App.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Endereco />
       </main>
       <Footer />
+      <WhatsappButton />
     </div>
   )
 }

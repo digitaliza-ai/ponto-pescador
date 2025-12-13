@@ -54,8 +54,62 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
   border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.image-link {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6));
+  color: var(--white);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 0 0 10px 10px;
+}
+
+.image-link:hover .image-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7));
+}
+
+.image-link:hover .carousel-image {
+  transform: scale(1.05);
+}
+
+.overlay-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #25D366;
+  transition: all 0.3s ease;
+}
+
+.image-link:hover .overlay-icon {
+  transform: scale(1.15);
+}
+
+.overlay-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+  line-height: 1.4;
 }
 
 @media (max-width: 968px) {

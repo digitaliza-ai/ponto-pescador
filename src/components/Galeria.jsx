@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { CaretLeft, CaretRight } from 'phosphor-react'
+import { CaretLeft, CaretRight, WhatsappLogo } from 'phosphor-react'
 import './Galeria.css'
 
 const Galeria = () => {
   const [images, setImages] = useState([])
+  const [imageNames, setImageNames] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [loading, setLoading] = useState(true)
 
@@ -46,13 +47,17 @@ const Galeria = () => {
           setImages([
             'https://placehold.co/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
           ])
+          setImageNames(['Erro ao carregar'])
         } else if (result.files && result.files.length > 0) {
           const imageUrls = result.files.map(file => getDirectImageUrl(file.id))
+          const names = result.files.map(file => file.name.replace(/\.[^/.]+$/, ''))
           setImages(imageUrls)
+          setImageNames(names)
         } else {
           setImages([
             'https://placehold.co/800x600/2d2d2d/d4af37?text=Nenhuma+imagem+encontrada'
           ])
+          setImageNames(['Nenhuma imagem encontrada'])
         }
         
         setLoading(false)
@@ -61,6 +66,7 @@ const Galeria = () => {
         setImages([
           'https://placehold.co/800x600/2d2d2d/d4af37?text=Erro+ao+carregar'
         ])
+        setImageNames(['Erro ao carregar'])
         setLoading(false)
       }
     }
@@ -99,7 +105,7 @@ const Galeria = () => {
           const maxIndex = isDesktop ? images.length - 2 : images.length - 1
           return prevIndex >= maxIndex ? 0 : prevIndex + step
         })
-      }, 5000) // Muda a cada 5 segundos
+      }, 10000)
 
       return () => clearInterval(interval)
     }
@@ -141,11 +147,26 @@ const Galeria = () => {
                     index === currentIndex ? 'primary' : ''
                   }`}
                 >
-                  <img 
-                    src={image} 
-                    alt={`Ponto do Pescador ${index + 1}`}
-                    className="carousel-image"
-                  />
+                  <a 
+                    href={`https://wa.me/5544999435647?text=${encodeURIComponent(`Olá, vi seu produto ${imageNames[index] || `Imagem ${index + 1}`}, gostaria de saber mais!`)}`}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="image-link"
+                  >
+                    <img 
+                      src={image} 
+                      alt={`Ponto do Pescador ${index + 1}`}
+                      className="carousel-image"
+                    />
+                    <div className="image-overlay">
+                      <div className="overlay-icon">
+                        <WhatsappLogo size={32} weight="fill" />
+                      </div>
+                      <div className="overlay-label">
+                        {imageNames[index] || `Imagem ${index + 1}`}
+                      </div>
+                    </div>
+                  </a>
                 </div>
               )
             })}
@@ -158,17 +179,6 @@ const Galeria = () => {
           >
             <CaretRight size={32} weight="bold" />
           </button>
-        </div>
-
-        <div className="carousel-indicators">
-          {images.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => goToSlide(index)}
-              aria-label={`Ir para imagem ${index + 1}`}
-            />
-          ))}
         </div>
       </div>
     </section>
