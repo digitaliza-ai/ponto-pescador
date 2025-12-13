@@ -10,7 +10,7 @@ const Galeria = () => {
   const fetchDriveImages = async (folderId) => {
     try {
       const API_KEY = import.meta.env.VITE_API_KEY
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png'+or+mimeType='image/webp'+or+mimeType='image/jpg'+or+mimeType='image/gif')&key=${API_KEY}&fields=files(id,name,mimeType)`
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png'+or+mimeType='image/webp'+or+mimeType='image/jpg'+or+mimeType='image/gif')+and+trashed=false&key=${API_KEY}&fields=files(id,name,mimeType)&pageSize=20`
       const response = await fetch(url)
 
       if (!response.ok) {

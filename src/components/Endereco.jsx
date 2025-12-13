@@ -2,8 +2,8 @@ import React from 'react'
 import './Endereco.css'
 
 const Endereco = () => {
-  // Endereço codificado para URL: Rua Takeshi Mitsuyasu, 1058 Jardim Ipê - Paranavaí - PR
-  const mapUrl = "https://maps.google.com/maps?q=Rua%20Takeshi%20Mitsuyasu%2C%201058%20-%20Jardim%20Ip%C3%AA%2C%20Paranava%C3%AD%20-%20PR&t=m&z=16&output=embed";
+  // Endereço codificado para URL: Av. Distrito Federal, 840 - Centro, Paranavaí - PR
+  const mapUrl = "https://maps.google.com/maps?q=Av.%20Distrito%20Federal%2C%20840%20-%20Centro%2C%20Paranava%C3%AD%20-%20PR%2C%2087701-310&t=m&z=16&output=embed";
 
   return (
     <section id="endereco" className="endereco">
@@ -12,7 +12,7 @@ const Endereco = () => {
         <div className="endereco-content">
           <div className="endereco-info">
             <div className="address-details">
-              <p><strong>Endereço: Rua Takeshi Mitsuyasu, 1058 Jardim Ipê 87706-290 - Paranavaí - PR</strong></p>
+              <p><strong>Endereço: Av. Distrito Federal, 840 - Centro, 87701-310 - Paranavaí - PR</strong></p>
             </div>
             <div className="map-container">
               <iframe
